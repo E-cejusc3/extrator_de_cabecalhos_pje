@@ -364,7 +364,7 @@ body {
 }
 
 .subtitulo-tabela {
-    display: block; 
+    /* A propriedade 'display: block' foi removida para permitir que a tag <br> controle a quebra de linha */
     margin-top: 2px; 
     font-weight: normal; 
 }
@@ -372,7 +372,6 @@ body {
 </head>
 <body style="margin:60px;padding:0">
     <div id="alert-box"></div>
-    <!--Interruptor temas Claro e escuro-->
     <div style="position: fixed; top: 10px; right: 10px; z-index: 1000; text-align: center;">
         <label>
             <input type="checkbox" id="theme-toggle" style="display: none;">
@@ -385,7 +384,7 @@ body {
         </div>
     </div>
     
-    <p style="text-align: center; font-family: Georgia;" id="Autor">Filipe de Sousa Lima | Gabriel Freitas Angst <br> e-CEJUSC3/TJDFT | <b>10/10/2025 15:39 <a title="Veja um tutorial em vídeo de como utilizar esta ferramenta" href="https://tjdf.sharepoint.com/sites/5NUVIMEC/_layouts/15/stream.aspx?id=%2Fsites%2F5NUVIMEC%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20%2D%20Extrator%20PJe%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E8feed9ae%2D0b9e%2D4e31%2D943c%2D9b089e43d927" target="_blank">🎦</a></b></p>
+    <p style="text-align: center; font-family: Georgia;" id="Autor">Filipe de Sousa Lima | Gabriel Freitas Angst <br> 5º NUVIMEC/TJDFT | <b>10/10/2025 17:21 <a title="Veja um tutorial em vídeo de como utilizar esta ferramenta" href="https://tjdf.sharepoint.com/sites/5NUVIMEC/_layouts/15/stream.aspx?id=%2Fsites%2F5NUVIMEC%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20%2D%20Extrator%20PJe%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E8feed9ae%2D0b9e%2D4e31%2D943c%2D9b089e43d927" target="_blank">🎦</a></b></p>
     <h1>📄 Extrator de cabeçalhos do PJe </h1>
     <textarea id="caixa1" placeholder="Após abrir o cabeçalho do processo no PJe e copiar todos os dados apertando Ctrl+A e Ctrl+C, clique no botão abaixo ''Extrair texto copiado''"></textarea>
     <textarea id="caixa2" placeholder="Caixa de Texto 2"></textarea>
@@ -428,7 +427,7 @@ body {
             <tr>
                 <td>
                <p class="titulo-tabela">
-    <span class="titulo-principal">DADOS DAS PARTES</span>
+    <span class="titulo-principal">DADOS DAS PARTES</span><br>
     <span class="subtitulo-tabela">(Portaria Conjunta GPR, GPVP, GSVP e GC n.º 71/2013; e CPC, art. 319, II)</span>
 </p>
             <p id="output3"></p>
@@ -437,20 +436,14 @@ body {
         </table>
     </div>
 <div>
-    <!-- Contêiner com ícone e texto -->
     <div class="help-icon-container">
-        <!-- Ícone de ajuda (link para o tutorial) -->
         <a href="https://tjdf.sharepoint.com/:v:/s/5NUVIMEC/ESXMYP7sowlMhRIh_Sxji7cBJ7porA38rkrwj0oSyYofuw" target="_blank">
             <i class="fas fa-question-circle help-icon"></i>
         </a>
-        <!-- Texto abaixo do ícone -->
         <div class="help-text">Ajuda?</div>
     </div>
 
-    <!-- Tooltip com texto de ajuda -->
     <div class="tooltip">Está com dificuldade? Nosso tutorial pode ajudar!</div>
-<!-- Início do Script-->
-
 <script>
     function showAlert3s(message) {
         const alertBox = document.getElementById('alert-box');
@@ -817,14 +810,7 @@ function gerarWord() {
 </head>
 
 <body>
-<!-- DESATIVEI COM COMENTÁRIO. ESSA PARTE TRAZIA A IMAGEM QUE SERIA O CABEÇALHO -->
-    <div class="WordSection1">
-        <!-- Cabeçalho com imagem via URL -->
-        <!--<div class="header">
-            <img src="${imagemURL}" alt="Cabeçalho">
-        </div>-->
-        
-        <!-- Conteúdo -->
+<div class="WordSection1">
         <div>
             <p class="Topo_titulo">TERMO DE SESSÃO DE CONCILIAÇÃO – JUIZADO ESPECIAL CÍVEL</p>
             <p class="Topo_titulo">(____________)</p>
@@ -838,9 +824,7 @@ function gerarWord() {
             </tr>
         </table>
 
-        <p style="margin: 0;">&nbsp;</p> <!-- Parágrafo vazio com margem zero -->
-
-        <table style="margin-bottom: 0;">
+        <p style="margin: 0;">&nbsp;</p> <table style="margin-bottom: 0;">
             <tr>
                 <td>
                     <p class="titulo">PARTICIPANTES DA AUDIÊNCIA</p>
@@ -849,9 +833,7 @@ function gerarWord() {
             </tr>
         </table>
 
-        <p style="margin: 0;">&nbsp;</p> <!-- Parágrafo vazio com margem zero -->
-
-        <table style="margin-bottom: 0;">
+        <p style="margin: 0;">&nbsp;</p> <table style="margin-bottom: 0;">
             <tr>
                 <td>
                     <p class="titulo">DADOS DAS PARTES</p>
