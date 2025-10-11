@@ -600,7 +600,6 @@
                 clone.style.fontFamily = 'Arial, sans-serif';
                 clone.style.fontSize = '12pt';
                 clone.style.color = 'black';
-                clone.style.marginBottom = '15px'; // Espaçamento entre as tabelas
 
                 // Estilo das células
                 clone.querySelectorAll('td').forEach(td => {
@@ -628,8 +627,8 @@
             const combinedHtml = `
                 <div style="font-family: Arial, sans-serif; font-size: 12pt; color: black;">
                     ${table1Html}
-                    ${table2Html}
-                    ${table3Html}
+                    <p>&nbsp;</p> ${table2Html}
+                    <p>&nbsp;</p> ${table3Html}
                 </div>
             `;
 
