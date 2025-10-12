@@ -218,7 +218,7 @@
                 <button class="botao" id="extrairTextoCopiado" onclick="extrairClipboard()">Extrair texto copiado</button>
                 <button class="botao" id="limparCaixas" onclick="limparCaixas()">Limpar Caixas</button>
                 <button class="botao" id="copiarDados" onclick="copiarDadosFormatados()">Copiar Cabeçalho</button>
-                <button class="botao" id="gerarWord" onclick="gerarWord()">Baixar Word</button>
+                <button class="botao" id="gerarWord" onclick="gerarWord()">Baixar Word (opcional)</button>
             </div>
       
             <div id="dados-para-copiar" class="space-y-6">
@@ -512,7 +512,7 @@
         const blob = new Blob([contentToCopy], { type: 'text/html' });
         const clipboardItem = new ClipboardItem({ 'text/html': blob });
         navigator.clipboard.write([clipboardItem]).then(() => {
-            showAlert3s('Conteúdo da cláusula copiado!');
+            showAlert3s('Conteúdo da cláusula copiado! Lembre-se de alterar a forma de colar no Word para "Manter a formatação original"');
         }).catch(err => {
             console.error('Falha ao copiar conteúdo: ', err);
             showAlert3s('Erro ao copiar o conteúdo.');
@@ -596,7 +596,7 @@
     const clipboardItem = new ClipboardItem({ 'text/html': blob });
 
     navigator.clipboard.write([clipboardItem]).then(() => {
-        showAlert3s('Cabeçalho copiado com sucesso!');
+        showAlert3s('Cabeçalho copiado com sucesso! Lembre-se de alterar a forma de colar no Word para "Manter a formatação original"');
     }).catch(err => {
         console.error('Falha ao copiar o cabeçalho: ', err);
         showAlert3s('Erro ao copiar o cabeçalho.');
