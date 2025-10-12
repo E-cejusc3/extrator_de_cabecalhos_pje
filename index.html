@@ -508,7 +508,7 @@
             return;
         }
         const htmlContent = contentElement.innerHTML;
-        const contentToCopy = `<div style="font-family: Arial, sans-serif; font-size: 12pt; line-height: 20pt;">${htmlContent}</div>`;
+        const contentToCopy = `<div style="font-family: Arial, sans-serif; font-size: 12pt; line-height: 20pt; text-align: justify;">${htmlContent}</div>`;
         const blob = new Blob([contentToCopy], { type: 'text/html' });
         const clipboardItem = new ClipboardItem({ 'text/html': blob });
         navigator.clipboard.write([clipboardItem]).then(() => {
