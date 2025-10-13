@@ -182,7 +182,7 @@
         </div>
         <div class="fixed top-4 right-4 z-50 text-center flex items-center gap-4">
             <div id="Autor" class="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">
-                Filipe S. Lima | Gabriel F. Angst<br>e-CEJUSC 3/TJDFT | 12/10/25 08:45 <br><a href="https://tjdf.sharepoint.com/sites/eCEJUSC3/_layouts/15/stream.aspx?id=%2Fsites%2FeCEJUSC3%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20-%20Extrator%20PJe%2Emp4" target="_blank">❓ Como utilizar? </a>
+                Filipe S. Lima | Gabriel F. Angst<br>e-CEJUSC 3/TJDFT | 13/10/25 13:55 <br><a href="https://tjdf.sharepoint.com/sites/eCEJUSC3/_layouts/15/stream.aspx?id=%2Fsites%2FeCEJUSC3%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20-%20Extrator%20PJe%2Emp4" target="_blank">❓ Como utilizar? </a>
             </div>
             <label>
                 <input type="checkbox" id="theme-toggle" class="hidden">
@@ -218,7 +218,7 @@
                 <button class="botao" id="extrairTextoCopiado" onclick="extrairClipboard()">Extrair texto copiado</button>
                 <button class="botao" id="limparCaixas" onclick="limparCaixas()">Limpar Caixas</button>
                 <button class="botao" id="copiarDados" onclick="copiarDadosFormatados()">Copiar Cabeçalho</button>
-                <button class="botao" id="gerarWord" onclick="gerarWord()">Baixar Word (opcional)</button>
+                <button class="botao" id="gerarWord" onclick="gerarWord()" hidden>Baixar Word (opcional)</button>
             </div>
       
             <div id="dados-para-copiar" class="space-y-6">
@@ -582,7 +582,7 @@
                         <td style="border: 1px solid black; padding: 5pt; line-height: 18pt;">
                             <p style="text-align: center; font-family: Arial, sans-serif; font-size: 12pt; line-height: 18pt;">
                                 <strong style="text-decoration: underline;">DADOS DAS PARTES</strong><br>
-                                <span style="font-size: 9pt;">(Portaria Conjunta 71/2013; CPC, art. 319, II)</span>
+                                <span style="font-size: 9pt;">(Portaria Conjunta GPR, GPVP, GSVP e GC n.º 71/2013; e CPC, art. 319, II)</span>
                             </p>
                             <div style="font-family: Arial, sans-serif; font-size: 12pt; line-height: 18pt;">${output3}</div>
                         </td>
@@ -685,7 +685,7 @@
         const output1 = document.getElementById('output1').innerHTML;
         const output2 = document.getElementById('output2').innerHTML;
         const output3 = document.getElementById('output3').innerHTML;
-        const content = `<html xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><style>@page WordSection1 { size: 595.3pt 841.9pt; margin: 2cm; } div.WordSection1 { page: WordSection1; } body { font-family: Arial, sans-serif; font-size: 12pt; color: black; text-align: justify; line-height: 20pt; } table { width: 100%; border-collapse: collapse; margin-bottom: 20px; } table, td { border: 1px solid black; } td { padding: 10px; } p { line-height: 20pt; margin: 0; } .titulo { text-align: center; font-weight: bold; text-decoration: underline; margin-bottom: 10px; }</style></head><body><div class="WordSection1"><p style="text-align:center; font-weight:bold;">TERMO DE SESSÃO DE CONCILIAÇÃO – JUIZADO ESPECIAL CÍVEL</p><p style="text-align:center; font-weight:bold;">(____________)</p><table><tr><td><p class="titulo">DADOS EXTRAÍDOS DO PJE</p>${output1}</td></tr></table><p>&nbsp;</p><table><tr><td><p class="titulo">PARTICIPANTES DA AUDIÊNCIA</p>${output2}</td></tr></table><p>&nbsp;</p><table><tr><td><p class="titulo">DADOS DAS PARTES</p><p style="text-align:center;">(Portaria Conjunta ...)</p>${output3}</td></tr></table></div></body></html>`;
+        const content = `<html xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><style>@page WordSection1 { size: 595.3pt 841.9pt; margin: 2cm; } div.WordSection1 { page: WordSection1; } body { font-family: Arial, sans-serif; font-size: 12pt; color: black; text-align: justify; line-height: 20pt; } table { width: 100%; border-collapse: collapse; margin-bottom: 20px; } table, td { border: 1px solid black; } td { padding: 10px; } p { line-height: 20pt; margin: 0; } .titulo { text-align: center; font-weight: bold; text-decoration: underline; margin-bottom: 10px; }</style></head><body><div class="WordSection1"><p style="text-align:center; font-weight:bold;">TERMO DE SESSÃO DE CONCILIAÇÃO – JUIZADO ESPECIAL CÍVEL</p><p style="text-align:center; font-weight:bold;">(____________)</p><table><tr><td><p class="titulo">DADOS EXTRAÍDOS DO PJE</p>${output1}</td></tr></table><p>&nbsp;</p><table><tr><td><p class="titulo">PARTICIPANTES DA AUDIÊNCIA</p>${output2}</td></tr></table><p>&nbsp;</p><table><tr><td><p class="titulo">DADOS DAS PARTES</p><p style="text-align:center;">(Portaria Conjunta GPR, GPVP, GSVP e GC n.º 71/2013; e CPC, art. 319, II))</p>${output3}</td></tr></table></div></body></html>`;
         const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
