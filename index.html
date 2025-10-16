@@ -218,7 +218,7 @@
                 <button class="botao" id="extrairTextoCopiado" onclick="extrairClipboard()">Extrair texto copiado</button>
                 <button class="botao" id="limparCaixas" onclick="limparCaixas()">Limpar Caixas</button>
                 <button class="botao" id="copiarDados" onclick="copiarDadosFormatados()">Copiar Cabeçalho</button>
-                <button class="botao" id="gerarWord" onclick="gerarWord()" hidden>Baixar Word (opcional)</button>
+                <button class="botao" id="gerarWord" onclick="gerarWord()">Versão antiga</button>
             </div>
       
             <div id="dados-para-copiar" class="space-y-6">
@@ -681,21 +681,12 @@
         document.getElementById('output3').innerHTML = output3Content;
     }
 
-    window.gerarWord = () => {
-        const output1 = document.getElementById('output1').innerHTML;
-        const output2 = document.getElementById('output2').innerHTML;
-        const output3 = document.getElementById('output3').innerHTML;
-        const content = `<html xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><style>@page WordSection1 { size: 595.3pt 841.9pt; margin: 2cm; } div.WordSection1 { page: WordSection1; } body { font-family: Arial, sans-serif; font-size: 12pt; color: black; text-align: justify; line-height: 20pt; } table { width: 100%; border-collapse: collapse; margin-bottom: 20px; } table, td { border: 1px solid black; } td { padding: 10px; } p { line-height: 20pt; margin: 0; } .titulo { text-align: center; font-weight: bold; text-decoration: underline; margin-bottom: 10px; }</style></head><body><div class="WordSection1"><p style="text-align:center; font-weight:bold;">TERMO DE SESSÃO DE CONCILIAÇÃO – JUIZADO ESPECIAL CÍVEL</p><p style="text-align:center; font-weight:bold;">(____________)</p><table><tr><td><p class="titulo">DADOS EXTRAÍDOS DO PJE</p>${output1}</td></tr></table><p>&nbsp;</p><table><tr><td><p class="titulo">PARTICIPANTES DA AUDIÊNCIA</p>${output2}</td></tr></table><p>&nbsp;</p><table><tr><td><p class="titulo">DADOS DAS PARTES</p><p style="text-align:center;">(Portaria Conjunta GPR, GPVP, GSVP e GC n.º 71/2013; e CPC, art. 319, II))</p>${output3}</td></tr></table></div></body></html>`;
-        const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        const nomeArquivo = document.getElementById('caixa2').value.trim().replace(/^_/, '');
-        link.href = url;
-        link.download = `${nomeArquivo || 'documento'} - CABEÇALHO.doc`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
+    function gerarWord() {
+    var urlDeRedirecionamento = "https://e-cejusc3.github.io/extrator_de_cabecalhos_pje/antigo.html";
+    
+    // Esta linha faz o redirecionamento.
+    window.location.href = urlDeRedirecionamento; 
+}
 
     // --- TEMA CLARO/ESCURO ---
     const themeToggle = document.getElementById("theme-toggle");
