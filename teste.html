@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -182,7 +183,7 @@
         </div>
         <div class="fixed top-4 right-4 z-50 text-center flex items-center gap-4">
             <div id="Autor" class="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">
-                Filipe S. Lima | Gabriel F. Angst<br>e-CEJUSC 3/TJDFT | 27/10/25 15:20 <br><a href="https://tjdf.sharepoint.com/sites/eCEJUSC3/_layouts/15/stream.aspx?id=%2Fsites%2FeCEJUSC3%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20-%20Extrator%20PJe%2Emp4" target="_blank">❓ Como utilizar? </a>
+                Filipe S. Lima | Gabriel F. Angst<br>e-CEJUSC 3/TJDFT | 04/11/25 19:45 <br><a href="https://tjdf.sharepoint.com/sites/eCEJUSC3/_layouts/15/stream.aspx?id=%2Fsites%2FeCEJUSC3%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20-%20Extrator%20PJe%2Emp4" target="_blank">❓ Como utilizar? </a>
             </div>
             <label>
                 <input type="checkbox" id="theme-toggle" class="hidden">
@@ -192,6 +193,17 @@
             </label>
         </div>
     </header>
+
+    <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+        <nav class="flex -mb-px" aria-label="Tabs">
+            <button id="tab-extrator" class="tab-button active" onclick="showTab('extrator')">
+                Extrator de Cabeçalhos
+            </button>
+            <button id="tab-clausulas" class="tab-button" onclick="showTab('clausulas')" style="display: none;">
+                Cláusulas Minutadas
+            </button>
+        </nav>
+    </div>
 
     <main>
         <div id="extrator-view">
@@ -236,7 +248,7 @@
             </div>
         </div>
 
-        <div id="clausulas-view" class="hidden" style="display: none !important;">
+        <div id="clausulas-view" class="hidden">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="md:col-span-1 flex flex-col gap-4">
                     <div class="relative">
@@ -301,30 +313,27 @@
     </div>
 
 <script type="module">
-    // Importações do Firebase (Comentadas)
-    // import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    // import { getDatabase, ref, onValue, set, push, remove } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+    // Importações do Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getDatabase, ref, onValue, set, push, remove } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
-    // --- CONFIGURAÇÃO FIREBASE (Comentada) ---
-    /*
+    // --- CONFIGURAÇÃO FIREBASE ---
     const firebaseConfig = {
-        apiKey: "AIzaSyB4Wx4yJq4xjU4Y0-DWJc2H7aWeBFQg7xk",
-        authDomain: "extrator-clausulas.firebaseapp.com",
-        databaseURL: "https://extrator-clausulas-default-rtdb.firebaseio.com",
-        projectId: "extrator-clausulas",
-        storageBucket: "extrator-clausulas.appspot.com",
-        messagingSenderId: "530836265351",
-        appId: "1:530836265351:web:97bfb9901b4c8d77989b22",
-        measurementId: "G-P710G5CVT5"
+        apiKey: "",
+        authDomain: "",
+        databaseURL: "",
+        projectId: "",
+        storageBucket: "",
+        messagingSenderId: "",
+        appId: "",
+        measurementId: ""
     };
-    */
     
-    // Inicialização do Firebase (Comentada)
-    // const app = initializeApp(firebaseConfig);
-    // const db = getDatabase(app);
-    // const clausesRef = ref(db, 'clauses');
-    
-    let allClauses = {}; // Deixado para não quebrar a lógica
+    // Inicialização do Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const clausesRef = ref(db, 'clauses');
+    let allClauses = {};
     let quill = null;
 
     // --- LÓGICA GERAL E DE ABAS ---
@@ -350,7 +359,6 @@
     }
 
     window.showTab = (tabName) => {
-        // Função mantida, embora não seja mais chamada pelos botões
         document.getElementById('extrator-view').classList.add('hidden');
         document.getElementById('clausulas-view').classList.add('hidden');
         document.getElementById('tab-extrator').classList.remove('active');
@@ -376,7 +384,7 @@
     }
     window.closeModal = (modalId) => document.getElementById(modalId).classList.replace('flex', 'hidden');
 
-    // --- LÓGICA DAS CLÁUSULAS (Mantida, mas inerte) ---
+    // --- LÓGICA DAS CLÁUSULAS ---
     document.getElementById('incluir-clausula-btn').addEventListener('click', () => openModal('password-modal'));
     window.checkPassword = () => {
         const passwordInput = document.getElementById('password-input');
@@ -446,17 +454,16 @@
         }
         const clauseData = { title, content };
         try {
-            // Linhas de 'await set' e 'await push' comentadas, pois 'db' e 'clausesRef' não estão definidos
             if (id) {
-                // await set(ref(db, `clauses/${id}`), clauseData);
-                showAlert3s('Cláusula atualizada (simulado).');
+                await set(ref(db, `clauses/${id}`), clauseData);
+                showAlert3s('Cláusula atualizada com sucesso!');
             } else {
-                // await push(clausesRef, clauseData);
-                showAlert3s('Cláusula criada (simulado).');
+                await push(clausesRef, clauseData);
+                showAlert3s('Cláusula criada com sucesso!');
             }
             resetClauseForm();
         } catch (error) {
-            console.error("Erro ao salvar cláusula (simulado): ", error);
+            console.error("Erro ao salvar cláusula: ", error);
             showAlert3s('Erro ao salvar. Tente novamente.');
         }
     });
@@ -482,23 +489,19 @@
     window.deleteClause = async (id) => {
         if (confirm('Tem certeza que deseja excluir esta cláusula?')) {
             try {
-                // Linha 'await remove' comentada
-                // await remove(ref(db, `clauses/${id}`));
-                showAlert3s('Cláusula excluída (simulado).');
+                await remove(ref(db, `clauses/${id}`));
+                showAlert3s('Cláusula excluída com sucesso!');
             } catch (error) {
-                console.error("Erro ao excluir (simulado): ", error);
+                console.error("Erro ao excluir: ", error);
                 showAlert3s('Erro ao excluir. Tente novamente.');
             }
         }
     }
 
-    // Listener do Firebase (Comentado)
-    /*
     onValue(clausesRef, (snapshot) => {
         allClauses = snapshot.val() || {};
         renderClauses(document.getElementById('search-clausulas').value);
     });
-    */
 
     window.copyClauseContent = () => {
         const contentElement = document.getElementById('clause-content-display');
@@ -518,7 +521,7 @@
         });
     };
 
-    // --- LÓGICA DO EXTRATOR DE CABEÇALHOS (Totalmente funcional) ---
+    // --- LÓGICA DO EXTRATOR DE CABEÇALHOS ---
     window.extrairClipboard = () => {
         navigator.clipboard.readText().then(text => {
             document.getElementById('caixa1').value = text;
@@ -622,7 +625,8 @@
         }
         const iconeDownloadIndex = caixa1.findIndex(line => line.includes('Ícone de download'));
         if (poloPassivoIndex !== -1 && iconeDownloadIndex !== -1 && iconeDownloadIndex > poloPassivoIndex) {
-            // const requeridos = caixa1.slice(poloPassivoIndex + 1, iconeDownloadIndex).filter(line => /(REQUERIDO|RÉU|REU|EXECUTADO|EMBARGADO|REQUERIDO ESPÓLIO DE)\)$/.test(line.trim())).map(line => line.replace('Parte cadastrada no Domicilio Judicial Eletrônico - Resolução CNJ Nº 455 de 27/04/2022 ', ''));
+            // <!-- ATUALIZAÇÃO 1: Inclui "REQUERIDO ESPÓLIO DE" na filtragem de réus -->
+            const requeridos = caixa1.slice(poloPassivoIndex + 1, iconeDownloadIndex).filter(line => /(REQUERIDO|RÉU|REU|EXECUTADO|EMBARGADO|REQUERIDO ESPÓLIO DE)\)$/.test(line.trim())).map(line => line.replace('Parte cadastrada no Domicilio Judicial Eletrônico - Resolução CNJ Nº 455 de 27/04/2022 ', ''));
             document.getElementById('caixa6').value = requeridos.join('\n');
         }
         document.getElementById('caixa5').value = formatarRequerentes(document.getElementById('caixa4').value.split('\n'));
@@ -632,16 +636,20 @@
 
     const formatarRequerentes = (requerentes) => {
         if (requerentes.length === 1) {
-            // return `<b>Requerente:</b> ${requerentes[0].replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA|EMBARGANTE|REQUERENTE ESPÓLIO DE)\)/g, '')}`;
+            // <!-- ATUALIZAÇÃO 2: Inclui "REQUERENTE ESPÓLIO DE" na formatação de autores -->
+            return `<b>Requerente:</b> ${requerentes[0].replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA|EMBARGANTE|REQUERENTE ESPÓLIO DE)\)/g, '')}`;
         }
-        // return requerentes.map((req, index) => `<b>${index + 1}º Requerente:</b> ${req.replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA|EMBARGANTE|REQUERENTE ESPÓLIO DE)\)/g, '')}`).join('\n');
+        // <!-- ATUALIZAÇÃO 3: Inclui "REQUERENTE ESPÓLIO DE" na formatação de autores (lista) -->
+        return requerentes.map((req, index) => `<b>${index + 1}º Requerente:</b> ${req.replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA|EMBARGANTE|REQUERENTE ESPÓLIO DE)\)/g, '')}`).join('\n');
     }
 
     const formatarRequeridos = (requeridos) => {
         if (requeridos.length === 1) {
-            // return `<b>Requerido(a):</b> ${requeridos[0].replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO|EMBARGADO|REQUERIDO ESPÓLIO DE)\)/g, '')}`;
+            // <!-- ATUALIZAÇÃO 4: Inclui "REQUERIDO ESPÓLIO DE" na formatação de réus -->
+            return `<b>Requerido(a):</b> ${requeridos[0].replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO|EMBARGADO|REQUERIDO ESPÓLIO DE)\)/g, '')}`;
         }
-        // return requeridos.map((req, index) => `<b>${index + 1}º Requerido(a):</b> ${req.replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO|EMBARGADO|REQUERIDO ESPÓLIO DE)\)/g, '')}`).join('\n');
+        // <!-- ATUALIZAÇÃO 5: Inclui "REQUERIDO ESPÓLIO DE" na formatação de réus (lista) -->
+        return requeridos.map((req, index) => `<b>${index + 1}º Requerido(a):</b> ${req.replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO|EMBARGADO|REQUERIDO ESPÓLIO DE)\)/g, '')}`).join('\n');
     }
 
     const atualizarOutputs = () => {
@@ -665,8 +673,10 @@
         document.getElementById('output1').innerHTML = formatBold(caixa8).replace(/\n/g, '<br>');
         document.getElementById('output2').innerHTML = formatBold(caixa9 + textoAdicional);
         
-        // const requerentes = caixa4.map(req => req.replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA|EMBARGANTE|REQUERENTE ESPÓLIO DE)\)/g, '').trim());
-        // const requeridos = caixa6.map(req => req.replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO|EMBARGADO|REQUERIDO ESPÓLIO DE)\)/g, '').trim());
+        // <!-- ATUALIZAÇÃO 6: Inclui "REQUERENTE ESPÓLIO DE" na limpeza para o output3 -->
+        const requerentes = caixa4.map(req => req.replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA|EMBARGANTE|REQUERENTE ESPÓLIO DE)\)/g, '').trim());
+        // <!-- ATUALIZAÇÃO 7: Inclui "REQUERIDO ESPÓLIO DE" na limpeza para o output3 -->
+        const requeridos = caixa6.map(req => req.replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO|EMBARGADO|REQUERIDO ESPÓLIO DE)\)/g, '').trim());
         
         let output3Content = '';
         requerentes.forEach((req, index) => {
