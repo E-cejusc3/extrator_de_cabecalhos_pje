@@ -6,6 +6,8 @@
     <title>Extrator de Cabeçalhos PJe</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <style>
         :root {
             --bg-color: #ffffff;
@@ -133,8 +135,42 @@
             border-color: var(--card-border);
         }
         
-        /* --- Estilos de Cláusulas, Editor e Modal REMOVIDOS --- */
+        /* --- Estilos das Cláusulas --- */
+        #clausulas-list {
+            height: calc(100vh - 250px);
+            overflow-y: auto;
+        }
+        #clausula-viewer {
+             height: calc(100vh - 250px);
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .clausula-item {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .clausula-item.selected {
+            background-color: var(--primary-color) !important;
+            color: white !important;
+        }
 
+        /* --- Estilos do Editor de Cláusulas --- */
+        #clause-editor-container { height: 250px; }
+        .ql-toolbar { border-radius: 0.5rem 0.5rem 0 0; }
+        .ql-container { border-radius: 0 0 0.5rem 0.5rem; font-size: 1rem; }
+        body.dark .ql-snow .ql-stroke { stroke: var(--text-color); }
+        body.dark .ql-snow .ql-fill, body.dark .ql-snow .ql-stroke.ql-thin { stroke: var(--text-color); }
+        body.dark .ql-snow .ql-picker-label { color: var(--text-color); }
+        body.dark .ql-toolbar { border-color: var(--input-border-color) !important; }
+        body.dark .ql-container { border-color: var(--input-border-color) !important; }
+        body.dark .ql-editor { color: var(--text-color); }
+        body.dark .ql-snow .ql-picker-options { background-color: var(--card-bg); border-color: var(--input-border-color); }
+
+
+        /* --- Estilos Gerais --- */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -146,7 +182,7 @@
         </div>
         <div class="fixed top-4 right-4 z-50 text-center flex items-center gap-4">
             <div id="Autor" class="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">
-                e-CEJUSC 3/TJDFT | 04/11/25 19:23 <br><a href="https://tjdf.sharepoint.com/sites/eCEJUSC3/_layouts/15/stream.aspx?id=%2Fsites%2FeCEJUSC3%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20-%20Extrator%20PJe%2Emp4" target="_blank">❓ Como utilizar? </a>
+                Filipe S. Lima | Gabriel F. Angst<br>e-CEJUSC 3/TJDFT | 27/10/25 15:20 <br><a href="https://tjdf.sharepoint.com/sites/eCEJUSC3/_layouts/15/stream.aspx?id=%2Fsites%2FeCEJUSC3%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20-%20Extrator%20PJe%2Emp4" target="_blank">❓ Como utilizar? </a>
             </div>
             <label>
                 <input type="checkbox" id="theme-toggle" class="hidden">
@@ -200,26 +236,125 @@
             </div>
         </div>
 
-        </main>
+        <div id="clausulas-view" class="hidden" style="display: none !important;">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="md:col-span-1 flex flex-col gap-4">
+                    <div class="relative">
+                        <input type="text" id="search-clausulas" placeholder="Buscar cláusula..." class="w-full p-3 rounded-lg border bg-[var(--input-bg-color)] border-[var(--input-border-color)] pl-10">
+                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    <div id="clausulas-list" class="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-2 space-y-1">
+                        </div>
+                    <button id="incluir-clausula-btn" class="w-full p-3 text-white font-bold rounded-lg bg-[var(--secondary-color)] hover:opacity-90 transition-opacity">
+                        <i class="fas fa-plus-circle mr-2"></i>Incluir / Gerenciar
+                    </button>
+                </div>
+
+                <div class="md:col-span-2 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-6">
+                    <div id="clausula-viewer">
+                        <div class="text-center text-gray-500 dark:text-gray-400">
+                            <i class="fas fa-file-alt fa-3x mb-4"></i>
+                            <p class="font-semibold">Selecione uma cláusula à esquerda para visualizar seu conteúdo aqui.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
     <div id="alert-box"></div>
 
-    <script type="module">
-    // Importações do Firebase REMOVIDAS
-    
-    // --- CONFIGURAÇÃO FIREBASE REMOVIDA ---
-    
-    // Inicialização do Firebase REMOVIDA
-    
-    // --- LÓGICA GERAL E DE ABAS ---
+    <div id="password-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-[var(--card-bg)] rounded-lg shadow-2xl p-8 w-full max-w-sm m-4">
+            <h3 class="text-xl font-semibold mb-4">Acesso Restrito</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Insira a senha para gerenciar as cláusulas.</p>
+            <input type="password" id="password-input" class="w-full p-2 border border-[var(--input-border-color)] rounded-md bg-[var(--input-bg-color)]" placeholder="Senha">
+            <p id="password-error" class="text-red-500 text-sm mt-2 hidden">Senha incorreta.</p>
+            <div class="flex justify-end gap-3 mt-6">
+                <button onclick="closeModal('password-modal')" class="px-4 py-2 bg-gray-200 dark:bg-gray-600 rounded-md hover:opacity-80">Cancelar</button>
+                <button onclick="checkPassword()" class="px-4 py-2 bg-[var(--primary-color)] text-white rounded-md hover:opacity-80 font-semibold">Confirmar</button>
+            </div>
+        </div>
+    </div>
 
-    // Função initializeQuillEditor REMOVIDA
+    <div id="manage-clause-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-[var(--card-bg)] rounded-lg shadow-2xl p-8 w-full max-w-4xl m-4 flex flex-col gap-6 max-h-[90vh]">
+            <h3 class="text-2xl font-semibold">Gerenciar Cláusulas</h3>
+            <form id="clause-form" class="flex flex-col gap-4">
+                <input type="hidden" id="clause-id">
+                <input type="text" id="clause-title" placeholder="Título da Cláusula" required class="w-full p-3 border border-[var(--input-border-color)] rounded-md bg-[var(--input-bg-color)]">
+                <div id="clause-editor-container"></div>
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="resetClauseForm()" class="px-4 py-2 bg-gray-200 dark:bg-gray-600 rounded-md hover:opacity-80">Novo</button>
+                    <button type="submit" class="px-4 py-2 bg-[var(--primary-color)] text-white rounded-md hover:opacity-80 font-semibold">Salvar Cláusula</button>
+                </div>
+            </form>
+            <div class="border-t border-[var(--card-border)] pt-4 flex-grow overflow-y-auto">
+                <h4 class="font-semibold mb-2">Cláusulas Existentes</h4>
+                <div id="manage-clausulas-list" class="space-y-2">
+                    </div>
+            </div>
+             <div class="flex justify-end pt-4 border-t border-[var(--card-border)]">
+                <button type="button" onclick="closeModal('manage-clause-modal')" class="px-6 py-2 bg-gray-200 dark:bg-gray-600 rounded-md hover:opacity-80">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+<script type="module">
+    // Importações do Firebase (Comentadas)
+    // import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    // import { getDatabase, ref, onValue, set, push, remove } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+
+    // --- CONFIGURAÇÃO FIREBASE (Comentada) ---
+    /*
+    const firebaseConfig = {
+        apiKey: "AIzaSyB4Wx4yJq4xjU4Y0-DWJc2H7aWeBFQg7xk",
+        authDomain: "extrator-clausulas.firebaseapp.com",
+        databaseURL: "https://extrator-clausulas-default-rtdb.firebaseio.com",
+        projectId: "extrator-clausulas",
+        storageBucket: "extrator-clausulas.appspot.com",
+        messagingSenderId: "530836265351",
+        appId: "1:530836265351:web:97bfb9901b4c8d77989b22",
+        measurementId: "G-P710G5CVT5"
+    };
+    */
+    
+    // Inicialização do Firebase (Comentada)
+    // const app = initializeApp(firebaseConfig);
+    // const db = getDatabase(app);
+    // const clausesRef = ref(db, 'clauses');
+    
+    let allClauses = {}; // Deixado para não quebrar a lógica
+    let quill = null;
+
+    // --- LÓGICA GERAL E DE ABAS ---
+    function initializeQuillEditor() {
+        if (document.querySelector('#clause-editor-container .ql-editor')) {
+            return; // Já inicializado
+        }
+        quill = new Quill('#clause-editor-container', {
+            modules: {
+                toolbar: [
+                    [{ 'font': [] }],
+                    [{ 'size': ['small', false, 'large', 'huge'] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'header': 1 }, { 'header': 2 }],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'align': [] }],
+                    ['clean']
+                ]
+            },
+            theme: 'snow'
+        });
+    }
 
     window.showTab = (tabName) => {
+        // Função mantida, embora não seja mais chamada pelos botões
         document.getElementById('extrator-view').classList.add('hidden');
-        // Linha de 'clausulas-view' removida
+        document.getElementById('clausulas-view').classList.add('hidden');
         document.getElementById('tab-extrator').classList.remove('active');
-        // Linha de 'tab-clausulas' removida
+        document.getElementById('tab-clausulas').classList.remove('active');
         document.getElementById(`${tabName}-view`).classList.remove('hidden');
         document.getElementById(`tab-${tabName}`).classList.add('active');
     }
@@ -233,12 +368,157 @@
         }, 3000);
     }
 
-    // Funções openModal e closeModal REMOVIDAS
+    window.openModal = (modalId) => {
+        document.getElementById(modalId).classList.replace('hidden', 'flex');
+        if (modalId === 'manage-clause-modal') {
+            initializeQuillEditor();
+        }
+    }
+    window.closeModal = (modalId) => document.getElementById(modalId).classList.replace('flex', 'hidden');
 
-    // --- LÓGICA DAS CLÁUSULAS REMOVIDA ---
+    // --- LÓGICA DAS CLÁUSULAS (Mantida, mas inerte) ---
+    document.getElementById('incluir-clausula-btn').addEventListener('click', () => openModal('password-modal'));
+    window.checkPassword = () => {
+        const passwordInput = document.getElementById('password-input');
+        const passwordError = document.getElementById('password-error');
+        if (passwordInput.value === '123') {
+            passwordInput.value = '';
+            passwordError.classList.add('hidden');
+            closeModal('password-modal');
+            openModal('manage-clause-modal');
+        } else {
+            passwordError.classList.remove('hidden');
+        }
+    };
 
+    const renderClauses = (filter = '') => {
+        const listContainer = document.getElementById('clausulas-list');
+        const manageListContainer = document.getElementById('manage-clausulas-list');
+        listContainer.innerHTML = '';
+        manageListContainer.innerHTML = '';
+        const filteredClauses = Object.entries(allClauses).filter(([id, clause]) => 
+            clause.title.toLowerCase().includes(filter.toLowerCase())
+        ).sort(([, a], [, b]) => a.title.localeCompare(b.title));
+        if (filteredClauses.length === 0) {
+            const emptyMsg = `<div class="text-center text-sm text-gray-500 p-4">Nenhuma cláusula encontrada.</div>`;
+            listContainer.innerHTML = emptyMsg;
+            manageListContainer.innerHTML = emptyMsg;
+            return;
+        }
+        filteredClauses.forEach(([id, clause]) => {
+            const item = document.createElement('div');
+            item.className = 'clausula-item p-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700';
+            item.textContent = clause.title;
+            item.dataset.id = id;
+            item.onclick = () => selectClause(id);
+            listContainer.appendChild(item);
+            const manageItem = document.createElement('div');
+            manageItem.className = 'flex justify-between items-center p-2 rounded-md bg-gray-100 dark:bg-gray-700';
+            manageItem.innerHTML = `<span class="font-medium">${clause.title}</span><div class="flex gap-2"><button onclick="editClause('${id}')" class="text-blue-500 hover:text-blue-700"><i class="fas fa-edit"></i></button><button onclick="deleteClause('${id}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button></div>`;
+            manageListContainer.appendChild(manageItem);
+        });
+    }
+    
+    window.selectClause = (id) => {
+        const clause = allClauses[id];
+        if (!clause) return;
+        document.querySelectorAll('.clausula-item').forEach(el => el.classList.remove('selected'));
+        const selectedElement = document.querySelector(`.clausula-item[data-id="${id}"]`);
+        if (selectedElement) {
+            selectedElement.classList.add('selected');
+        }
+        const viewer = document.getElementById('clausula-viewer');
+        viewer.innerHTML = `<div class="flex justify-between items-center mb-4 pb-2 border-b border-[var(--card-border)]"><h3 class="text-2xl font-bold">${clause.title}</h3><button onclick="copyClauseContent()" class="botao flex items-center" style="background-color: var(--primary-color);"><i class="fas fa-copy mr-2"></i>Copiar</button></div><div id="clause-content-display" class="prose dark:prose-invert max-w-none">${clause.content}</div>`;
+    }
 
-    // --- LÓGICA DO EXTRATOR DE CABEÇALHOS ---
+    document.getElementById('search-clausulas').addEventListener('input', (e) => {
+        renderClauses(e.target.value);
+    });
+
+    document.getElementById('clause-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('clause-id').value;
+        const title = document.getElementById('clause-title').value;
+        const content = quill.root.innerHTML;
+        if (title.trim() === '' || content === '<p><br></p>') {
+            showAlert3s('O título e o conteúdo não podem estar vazios.');
+            return;
+        }
+        const clauseData = { title, content };
+        try {
+            // Linhas de 'await set' e 'await push' comentadas, pois 'db' e 'clausesRef' não estão definidos
+            if (id) {
+                // await set(ref(db, `clauses/${id}`), clauseData);
+                showAlert3s('Cláusula atualizada (simulado).');
+            } else {
+                // await push(clausesRef, clauseData);
+                showAlert3s('Cláusula criada (simulado).');
+            }
+            resetClauseForm();
+        } catch (error) {
+            console.error("Erro ao salvar cláusula (simulado): ", error);
+            showAlert3s('Erro ao salvar. Tente novamente.');
+        }
+    });
+
+    window.resetClauseForm = () => {
+        document.getElementById('clause-form').reset();
+        document.getElementById('clause-id').value = '';
+        if (quill) {
+            quill.setContents([]);
+        }
+    }
+
+    window.editClause = (id) => {
+        const clause = allClauses[id];
+        if (!clause) return;
+        document.getElementById('clause-id').value = id;
+        document.getElementById('clause-title').value = clause.title;
+        if (quill) {
+             quill.clipboard.dangerouslyPasteHTML(clause.content);
+        }
+    }
+
+    window.deleteClause = async (id) => {
+        if (confirm('Tem certeza que deseja excluir esta cláusula?')) {
+            try {
+                // Linha 'await remove' comentada
+                // await remove(ref(db, `clauses/${id}`));
+                showAlert3s('Cláusula excluída (simulado).');
+            } catch (error) {
+                console.error("Erro ao excluir (simulado): ", error);
+                showAlert3s('Erro ao excluir. Tente novamente.');
+            }
+        }
+    }
+
+    // Listener do Firebase (Comentado)
+    /*
+    onValue(clausesRef, (snapshot) => {
+        allClauses = snapshot.val() || {};
+        renderClauses(document.getElementById('search-clausulas').value);
+    });
+    */
+
+    window.copyClauseContent = () => {
+        const contentElement = document.getElementById('clause-content-display');
+        if (!contentElement) {
+            showAlert3s('Nenhum conteúdo para copiar.');
+            return;
+        }
+        const htmlContent = contentElement.innerHTML;
+        const contentToCopy = `<div style="font-family: Arial, sans-serif; font-size: 12pt; line-height: 20pt; text-align: justify;">${htmlContent}</div>`;
+        const blob = new Blob([contentToCopy], { type: 'text/html' });
+        const clipboardItem = new ClipboardItem({ 'text/html': blob });
+        navigator.clipboard.write([clipboardItem]).then(() => {
+            showAlert3s('Conteúdo da cláusula copiado! Lembre-se de alterar a forma de colar no Word para "Manter a formatação original"');
+        }).catch(err => {
+            console.error('Falha ao copiar conteúdo: ', err);
+            showAlert3s('Erro ao copiar o conteúdo.');
+        });
+    };
+
+    // --- LÓGICA DO EXTRATOR DE CABEÇALHOS (Totalmente funcional) ---
     window.extrairClipboard = () => {
         navigator.clipboard.readText().then(text => {
             document.getElementById('caixa1').value = text;
